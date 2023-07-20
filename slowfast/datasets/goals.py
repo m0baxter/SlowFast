@@ -2,6 +2,7 @@
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
 
 import numpy as np
+import gc
 import os
 import random
 import pandas
@@ -278,6 +279,8 @@ class Goals(torch.utils.data.Dataset):
         # Try to decode and sample a clip from a video. If the video can not be
         # decoded, repeatly find a random video replacement that can be decoded.
         for i_try in range(self._num_retries):
+
+            gc.collect()
             video_container = None
             try:
                 video_container = container.get_video_container(
