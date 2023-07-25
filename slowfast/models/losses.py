@@ -6,6 +6,7 @@
 from functools import partial
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 from pytorchvideo.losses.soft_target_cross_entropy import (
     SoftTargetCrossEntropyLoss,
@@ -83,8 +84,13 @@ class FocalLoss(nn.Module):
         print("targets", targets.shape)
         print(targets)
         print()
+        print("targets", targets.shape, F.one_hot(targets).shape)
+        print(targets)
+        print(F.one_hot(targets))
+        print()
+        print()
 
-        labels = targets * (1 - self.label_smoothing) + self.label_smoothing / self.num_classes
+        labels = F.one_hot(targets) * (1 - self.label_smoothing) + self.label_smoothing / self.num_classes
 
         probs = self.prob_fct(inputs)
         p_t = labels * probs + (1 - labels) * (1 - probs)
