@@ -72,7 +72,7 @@ def train_epoch(
     if cfg.MODEL.FROZEN_BN:
         misc.frozen_bn_stats(model)
     # Explicitly declare reduction to mean.
-    loss_fun = losses.get_loss_func(cfg.MODEL.LOSS_FUNC)(reduction="mean")
+    loss_fun = losses.get_loss_func(cfg.MODEL.LOSS_FUNC)(reduction = "mean", label_smoothing = cnfg.MODEL.LABEL_SMOOTHING)
 
     for cur_iter, (inputs, labels, index, time, meta) in enumerate(
         train_loader

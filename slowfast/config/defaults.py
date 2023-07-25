@@ -399,6 +399,9 @@ _C.MODEL.NUM_CLASSES = 400
 # Loss function.
 _C.MODEL.LOSS_FUNC = "cross_entropy"
 
+# Label smoothing for focal loss
+_C.MODEL.LABEL_SMOOTHING = 0.0
+
 # Model architectures that has one single pathway.
 _C.MODEL.SINGLE_PATHWAY_ARCH = [
     "2d",

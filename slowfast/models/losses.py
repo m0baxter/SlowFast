@@ -62,6 +62,39 @@ class MultipleMSELoss(nn.Module):
         return loss_sum, multi_loss
 
 
+class FocalLoss(nn.Module):
+
+    def __init_(self, gamma = 2, alpha = 0.25, label_smoothing = 0.0, apply_class_balancing = False, *args, **kwargs):
+
+        super(FocalLoss, self).__init__(*args, **kwargs)
+
+        self.gamma = gamma
+        self.alpha = alpha
+        self.label_smoothing = label_smoothing
+        self.apply_class_balancing = apply_class_balancing
+        self.loss_fct = nn.BCEWithLogitsLoss(reduction = "none")
+        self.prob_fct = nn.Softmax()
+
+    def forward(self, inputs, targets):
+
+        num_classes = labels.shape[-1]
+        labels = targets * (1 - self.label_smoothing) + self.label_smoothing / num_classes
+
+        probs = self.prob_fct(inputs)
+        p_t = labels * probs + (1 - labels) * (1 - probs)
+        focal_factor = torch.pow(1.0 - p_t, self.gamma)
+        bce = self.loss_fct(inputs, labels)
+        focal_bce = focal_factor * bce
+
+        if (self.apply_class_balancing):
+
+            weight = labels * self.alpha + (1 - labels) * (1 - self.alpha)
+            focal_bce = weight * focal_bce
+
+        loss = focal_bce.mean()
+
+        return loss
+
 _LOSSES = {
     "cross_entropy": nn.CrossEntropyLoss,
     "bce": nn.BCELoss,
@@ -72,6 +105,7 @@ _LOSSES = {
     "contrastive_loss": ContrastiveLoss,
     "mse": nn.MSELoss,
     "multi_mse": MultipleMSELoss,
+    "focal_loss": FocalLoss,
 }
 
 
