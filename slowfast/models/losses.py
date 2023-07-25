@@ -74,24 +74,11 @@ class FocalLoss(nn.Module):
         self.label_smoothing = label_smoothing
         self.apply_class_balancing = apply_class_balancing
         self.loss_fct = nn.BCEWithLogitsLoss(reduction = "none")
-        self.prob_fct = nn.Softmax()
+        self.prob_fct = nn.Softmax(dim = 1)
 
     def forward(self, inputs, targets):
 
-        print("inputs", inputs.shape)
-        print(inputs)
-        print()
-        print("targets", targets.shape)
-        print(targets)
-        print()
-        print("targets", targets.shape, F.one_hot(targets).shape)
-        print(targets)
-        print(F.one_hot(targets))
-        print()
-        print()
-
         labels = F.one_hot(targets) * (1 - self.label_smoothing) + self.label_smoothing / self.num_classes
-
         probs = self.prob_fct(inputs)
         p_t = labels * probs + (1 - labels) * (1 - probs)
         focal_factor = torch.pow(1.0 - p_t, self.gamma)
