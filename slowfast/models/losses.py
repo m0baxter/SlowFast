@@ -64,9 +64,9 @@ class MultipleMSELoss(nn.Module):
 
 class FocalLoss(nn.Module):
 
-    def __init_(self, gamma = 2, alpha = 0.25, label_smoothing = 0.0, apply_class_balancing = False, *args, **kwargs):
+    def __init_(self, gamma = 2, alpha = 0.25, label_smoothing = 0.0, apply_class_balancing = False):
 
-        super(FocalLoss, self).__init__(*args, **kwargs)
+        super(FocalLoss, self).__init__()
 
         self.gamma = gamma
         self.alpha = alpha
