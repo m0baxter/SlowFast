@@ -78,7 +78,7 @@ class FocalLoss(nn.Module):
 
     def forward(self, inputs, targets):
 
-        labels = F.one_hot(targets) * (1 - self.label_smoothing) + self.label_smoothing / self.num_classes
+        labels = F.one_hot(targets, num_classes = self.num_classes) * (1 - self.label_smoothing) + self.label_smoothing / self.num_classes
         probs = self.prob_fct(inputs)
         p_t = labels * probs + (1 - labels) * (1 - probs)
         focal_factor = torch.pow(1.0 - p_t, self.gamma)
