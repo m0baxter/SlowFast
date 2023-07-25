@@ -67,7 +67,7 @@ class FocalLoss(nn.Module):
     def __init__(self, gamma = 2, alpha = 0.25, label_smoothing = 0.0, apply_class_balancing = False, num_classes = 2):
 
         super(FocalLoss, self).__init__()
-        self.num_classes
+        self.num_classes = num_classes
         self.gamma = gamma
         self.alpha = alpha
         self.label_smoothing = label_smoothing
