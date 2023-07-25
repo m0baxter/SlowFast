@@ -64,9 +64,10 @@ class MultipleMSELoss(nn.Module):
 
 class FocalLoss(nn.Module):
 
-    def __init__(self, gamma = 2, alpha = 0.25, label_smoothing = 0.0, apply_class_balancing = False):
+    def __init__(self, gamma = 2, alpha = 0.25, label_smoothing = 0.0, apply_class_balancing = False, num_classes = 2):
 
         super(FocalLoss, self).__init__()
+        self.num_classes
         self.gamma = gamma
         self.alpha = alpha
         self.label_smoothing = label_smoothing
@@ -76,8 +77,14 @@ class FocalLoss(nn.Module):
 
     def forward(self, inputs, targets):
 
-        num_classes = inputs.shape[-1]
-        labels = targets * (1 - self.label_smoothing) + self.label_smoothing / num_classes
+        print("inputs", inputs.shape)
+        print(inputs)
+        print()
+        print("targets", targets.shape)
+        print(targets)
+        print()
+
+        labels = targets * (1 - self.label_smoothing) + self.label_smoothing / self.num_classes
 
         probs = self.prob_fct(inputs)
         p_t = labels * probs + (1 - labels) * (1 - probs)
