@@ -76,7 +76,7 @@ class FocalLoss(nn.Module):
 
     def forward(self, inputs, targets):
 
-        num_classes = labels.shape[-1]
+        num_classes = inputs.shape[-1]
         labels = targets * (1 - self.label_smoothing) + self.label_smoothing / num_classes
 
         probs = self.prob_fct(inputs)
